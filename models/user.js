@@ -9,17 +9,13 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(40),
             allowNull: false,
         },
-        salt:{
-            type: DataTypes.STRING(40),
-            allowNull: false,
-        },
         password: {
-            type: DataTypes.STRING(40),
+            type: DataTypes.STRING(255),
             allowNull: true,
         },
         provider: {
             type: DataTypes.STRING(40),
-            allowNull: false,
+            allowNull: true,
             defaultValue: 'local',
         },
         snsId: {

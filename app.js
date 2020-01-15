@@ -8,11 +8,12 @@ var morgan = require('morgan');
 var flash = require('connect-flash');
 //passport 모듈
 const passport = require('passport');
+const passportConfig = require('./passport');
 //dotenv사용
 require('dotenv').config();
 const session = require('express-session');
 const pageRouter = require('./routes/page');
-
+const authRouter = require('./routes/auth');
 var app = express();
 
 // view engine setup
@@ -41,11 +42,21 @@ app.use(session({
 }));
 app.use(express.json());
 
-const { sequelize } =require('./models');
+const { sequelize } = require('./models');
+// // 데이터 모델 변경 확인
 sequelize.sync();
+passportConfig(passport);
 
-//경로및 작동 관련 코드 아래쪽에 배치하는 것을 권장한다.
+//passport.initialize는 미들웨어 요청(req 객체)에 passport 설정을 심는다.
+app.use(passport.initialize());
+
+//passport.session는 req.session객체에 passport 정보를 저장합니다. 
+//req.session 객체에 express-session에서 생성하는 것이므로 express-session 미들웨어보다 뒤에 연결해야합니다.
+app.use(passport.session());
+
+//경로 및 작동 관련 코드 아래쪽에 배치하는 것을 권장한다.
 app.use('/', pageRouter);
+app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
