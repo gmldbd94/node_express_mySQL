@@ -68,5 +68,28 @@ router.get('/kakao/callback', passport.authenticate('kakao', { failureRedirect: 
     res.redirect('/');
 });
 
+//페이스북
+router.get('/facebook', passport.authenticate('facebook'));
+router.get('/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/',}), (req, res) => {
+    res.redirect('/');
+});
+
+//구글
+router.get('/google', passport.authenticate('google',{ scope: 
+    [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile'
+    ] }));
+
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/',}), (req, res) => {
+    res.redirect('/');
+});
+
+//네이버
+router.get('/naver', passport.authenticate('naver'));
+router.get('/naver/callback', passport.authenticate('naver', { failureRedirect: '/',}), (req, res) => {
+    res.redirect('/');
+});
+
 module.exports = router;
 

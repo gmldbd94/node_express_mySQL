@@ -44,7 +44,7 @@ app.use(express.json());
 
 const { sequelize } = require('./models');
 // // 데이터 모델 변경 확인
-sequelize.sync();
+// sequelize.sync();
 passportConfig(passport);
 
 //passport.initialize는 미들웨어 요청(req 객체)에 passport 설정을 심는다.
