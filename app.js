@@ -16,6 +16,9 @@ const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
 var app = express();
 
+//sequelize
+const sequelize = require('./models').sequelize;
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -42,7 +45,6 @@ app.use(session({
 }));
 app.use(express.json());
 
-const { sequelize } = require('./models');
 // // 데이터 모델 변경 확인
 // sequelize.sync();
 passportConfig(passport);

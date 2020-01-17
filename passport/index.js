@@ -15,7 +15,8 @@ module.exports = (passport) => {
 
     //session의 값을 통해서 User의 값을 호출하고 req.user에 호출한 값을 매번 요청하고 저장합니다.
     passport.deserializeUser((id, done) => {
-       User.findOne({ where: { id }})
+            //유저의 정보를 모두 헤더에 넣는건 좀 그렇긴 한데.... 확인해보자!
+            User.findOne({ where: { id }, attributes:['email', 'nick', 'id']})
             .then(user => done(null, user))
             .catch(err => done(err));
     });

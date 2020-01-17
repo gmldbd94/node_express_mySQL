@@ -1,7 +1,12 @@
 const express = require('express');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
-const router = express.Router();
-
+const router = express.Router({
+    mergeParams: true
+});
+const postRouter = require('./post');
+const commentRouter = require('./comment');
+const likeRouter = require('./like');
+//기존에 작성된 경로
 router.get('/profile', isLoggedIn, (req, res) => {
     res.render('profile', {title: '내 정보 - NodeBird', user: req.user});
 })
@@ -22,5 +27,9 @@ router.get('/', (req, res, next) => {
         joinError: req.flash('loginError')
     });
 });
+
+router.use('/post', postRouter);
+router.use('/comment', commentRouter);
+router.use('/like', likeRouter);
 
 module.exports = router;

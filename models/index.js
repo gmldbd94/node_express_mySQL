@@ -6,11 +6,6 @@ require('dotenv').config();
 const env = process.env.NODE_ENV || 'development';
 const db = {};
 
-// // Option 1: Passing parameters separately
-// const sequelize = new Sequelize('database', 'username', 'password', {
-//   host: 'localhost',
-//   dialect: /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
-// });
 const sequelize = new Sequelize(
    process.env.DATABASE, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
      host: process.env.DB_HOST,
@@ -43,19 +38,22 @@ db.Comment = require('./comment.js')(sequelize, Sequelize);
 db.Hashtag = require('./hashtag.js')(sequelize, Sequelize);
 
 //작성자와 게시글
-db.User.hasMany(db.Post, {foreignKey: 'PostId', as: 'posts'});
-db.Post.belongsTo(db.User, {as : 'writer'});
+db.User.hasMany(db.Post, {foreginKey: 'writerId', as: 'posts'});
+db.Post.belongsTo(db.User, {foreginKey: 'writerId', as : 'writer'});
 
 //게시글과 댓글
-db.Post.hasMany(db.Comment, {as: 'comments'});
-db.Comment.belongsTo(db.Post, {as: 'post'});
+db.Post.hasMany(db.Comment, {foreginKey: 'parent_post', as: 'comments'});
+db.Comment.belongsTo(db.Post, {foreginKey: 'parent_post', as: 'parent_post'});
 
+//작성자와 댓글
+db.User.hasMany(db.Comment, {as: 'comments'});
+db.Comment.belongsTo(db.User, {as: 'writer'});
 //대댓글
-db.Comment.hasMany(db.Comment, {as: 'sub_comment'});
+db.Comment.hasMany(db.Comment, {as: 'sub_comments'});
 
 //작성자와 좋아요글
-db.User.belongsToMany(db.Post, { through: 'Like_Post'});
-db.Post.belongsToMany(db.User, { through: 'Like_Post'});
+db.User.belongsToMany(db.Post, { through: 'Like_Post', as : 'like_posts'});
+db.Post.belongsToMany(db.User, { through: 'Like_Post', as : 'like_users'});
 
 //작성글과 해시태그
 db.Post.belongsToMany(db.Hashtag, { through: 'PostHashTag'});
@@ -73,6 +71,4 @@ db.User.belongsToMany(db.User, {
   through: 'Follow',
 })
 
-
-//
 module.exports = db;
