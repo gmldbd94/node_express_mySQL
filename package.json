@@ -6,7 +6,7 @@
     "start": "nodemon app"
   },
   "dependencies": {
-    "bcrypt": "^3.0.7",
+    "bcrypt": "^5.0.0",
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.4",
     "cookieparser": "^0.1.0",
